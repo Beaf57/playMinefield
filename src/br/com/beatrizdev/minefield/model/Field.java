@@ -73,6 +73,10 @@ public class Field {
 		mined = true;
 	}
 	
+	public boolean isMined() {
+		return mined;
+	}
+	
 	public boolean isMarked() {
 		return marked;
 	}
