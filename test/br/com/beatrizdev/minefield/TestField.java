@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.beatrizdev.minefield.exception.ExplotionException;
+import br.com.beatrizdev.minefield.exception.ExplosionException;
 import br.com.beatrizdev.minefield.model.Field;
 
 public class TestField {
@@ -100,7 +100,7 @@ public class TestField {
 	@Test
 	void testMinedAndNotMarked() {
 		field.toMine();
-		assertThrows(ExplotionException.class, () -> {
+		assertThrows(ExplosionException.class, () -> {
 			field.toOpen();
 		});
 	}

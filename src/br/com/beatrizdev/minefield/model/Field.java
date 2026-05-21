@@ -3,7 +3,7 @@ package br.com.beatrizdev.minefield.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.beatrizdev.minefield.exception.ExplotionException;
+import br.com.beatrizdev.minefield.exception.ExplosionException;
 
 public class Field {
 
@@ -54,7 +54,7 @@ public class Field {
 			open = true;
 			
 			if(mined) {
-				throw new ExplotionException();
+				throw new ExplosionException();
 			}
 			if(safeNeighborhood()) {
 				neighbors.forEach(v -> v.toOpen());
@@ -79,6 +79,10 @@ public class Field {
 	
 	public boolean isMarked() {
 		return marked;
+	}
+	
+	public void setOpen(boolean open) {
+		this.open = open;
 	}
 	
 	public boolean isOpen() {
