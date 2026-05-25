@@ -2,15 +2,17 @@ package br.com.beatrizdev.minefield.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class Board {
+public class Board implements ObserverField {
 
 	private int lines;
 	private int columns;
 	private int mines;
 	
 	private final List<Field> fields = new ArrayList<>();
+	private final List<Consumer<Boolean>> observers = new ArrayList<>();
 	
 	public Board(int lines, int columns, int mines) {
 		this.lines = lines;
@@ -22,17 +24,21 @@ public class Board {
 		drawMines();
 	}
 	
+	public void registerObservers(Consumer<Boolean> observer) {
+		observers.add(observer);
+	}
+	
+	private void notifyObservers(boolean result) {
+		observers.stream()
+			.forEach(o -> o.accept(result));
+	}
+	
 	public void toOpen(int line, int column) {
-		try {
+		
 			fields.parallelStream()
 			.filter(f -> f.getLine() == line && f.getColumn() == column)
 			.findFirst()
 			.ifPresent(f -> f.toOpen());
-		} catch(Exception e) {
-			//FIXME Ajustar a implementação do método abrir
-			fields.forEach(f -> f.setOpen(true));
-			throw e;
-		}
 	}
 	
 	public void toggleMarkup(int line, int column) {
@@ -44,7 +50,9 @@ public class Board {
 	private void generateFields() {
 		for(int line = 0; line < lines; line++) {
 			for(int column = 0; column < columns; column++) {
-				fields.add(new Field(line, column));
+				Field field = new Field(line, column);
+				field.registerObserver(this);
+				fields.add(field);
 			}
 		}
 	}
@@ -73,6 +81,23 @@ public class Board {
 	public void restart() {
 		fields.stream().forEach(f -> f.restart());
 		drawMines();
+	}
+
+	@Override
+	public void eventOccurred(Field c, EventField event) {
+		if(event == EventField.BLOWUP) {
+			showMines();
+			notifyObservers(false);
+		} else if(objectiveAchieved()) {
+			notifyObservers(true);
+		}
+		
+	}
+	
+	private void showMines() {
+		fields.stream()
+			.filter(f -> f.isMined())
+			.forEach(f -> f.setOpen(true));
 	}
 	
 
