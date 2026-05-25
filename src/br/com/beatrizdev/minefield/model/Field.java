@@ -3,8 +3,6 @@ package br.com.beatrizdev.minefield.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.beatrizdev.minefield.exception.ExplosionException;
-
 public class Field {
 
 	private final int line;
@@ -15,11 +13,21 @@ public class Field {
 	private boolean marked = false;
 	
 	private List<Field> neighbors = new ArrayList<>();
+	private List<ObserverField> observers = new ArrayList<>();
 	
 	public Field(int line, int column) {
 		super();
 		this.line = line;
 		this.column = column;
+	}
+	
+	public void registerObserver(ObserverField observer) {
+		observers.add(observer);
+	}
+	
+	private void notifyObservers(EventField event) {
+		observers.stream()
+			.forEach(o -> o.eventOccurred(this, event));
 	}
 	
 	public boolean addNeighbor(Field neighbor) {
@@ -45,17 +53,26 @@ public class Field {
 	public void toggleMarkup() {
 		if(!open) {
 			marked = !marked;
+			
+			if(marked) {
+				notifyObservers(EventField.MARKED);
+			} else {
+				notifyObservers(EventField.UNSCHEDULE);
+			}
 		}
 	}
 	
 	public boolean toOpen() {
 		
 		if(!open && !marked) {
-			open = true;
-			
+	
 			if(mined) {
-				//TODO Implementar nova versão
+				notifyObservers(EventField.BLOWUP);
+				return true;
 			}
+			
+			setOpen(true);
+			
 			if(safeNeighborhood()) {
 				neighbors.forEach(v -> v.toOpen());
 			}
@@ -83,6 +100,10 @@ public class Field {
 	
 	public void setOpen(boolean open) {
 		this.open = open;
+		
+		if(open) {
+			notifyObservers(EventField.OPEN);
+		}
 	}
 	
 	public boolean isOpen() {
