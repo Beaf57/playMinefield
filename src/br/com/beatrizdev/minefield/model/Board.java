@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import br.com.beatrizdev.minefield.exception.ExplosionException;
-
 public class Board {
 
 	private int lines;
@@ -30,7 +28,8 @@ public class Board {
 			.filter(f -> f.getLine() == line && f.getColumn() == column)
 			.findFirst()
 			.ifPresent(f -> f.toOpen());
-		} catch(ExplosionException e) {
+		} catch(Exception e) {
+			//FIXME Ajustar a implementação do método abrir
 			fields.forEach(f -> f.setOpen(true));
 			throw e;
 		}
@@ -76,30 +75,5 @@ public class Board {
 		drawMines();
 	}
 	
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		int i = 0;
-		sb.append("  ");
-		for(int f = 0; f < columns; f++) {
-			sb.append(" ");
-			sb.append(f);
-			sb.append(" ");
-		}
-		
-		sb.append("\n");
-		
-		for(int l = 0; l < lines; l++) {
-			sb.append(l);
-			sb.append(" ");
-			for(int c = 0; c < columns; c++) {
-				sb.append(" ");
-				sb.append(fields.get(i));
-				sb.append(" ");
-				i++;
-			}
-			sb.append("\n");
-		}
-		
-		return sb.toString();
-	}
+
 }

@@ -54,7 +54,7 @@ public class Field {
 			open = true;
 			
 			if(mined) {
-				throw new ExplosionException();
+				//TODO Implementar nova versão
 			}
 			if(safeNeighborhood()) {
 				neighbors.forEach(v -> v.toOpen());
@@ -111,20 +111,6 @@ public class Field {
 		open = false;
 		mined = false;
 		marked = false;
-	}
-	
-	public String toString() {
-		if(marked) {
-			return "x";
-		} else if(open && mined) {
-			return "*";
-		} else if(open && minesInTheNeighborhood() > 0) {
-			return Long.toString(minesInTheNeighborhood());
-		} else if(open) {
-			return " ";
-		} else {
-			return "?";
-		}
 	}
 }
 

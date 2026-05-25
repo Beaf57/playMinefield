@@ -6,7 +6,7 @@ import br.com.beatrizdev.minefield.ui.ConsoleBoard;
 public class Aplicacao {
  public static void main(String[] args) {
 	 
-	 Board board = new Board(6, 6, 6);
+	 Board board = new Board(6, 6, 4);
 	 new ConsoleBoard(board);
 	 
   }
