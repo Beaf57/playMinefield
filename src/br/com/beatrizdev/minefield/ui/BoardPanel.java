@@ -13,7 +13,7 @@ public class BoardPanel extends JPanel {
 		
 		setLayout(new GridLayout(board.getLines(), board.getColumns()));
 		
-		board.forEach(f -> add(new FieldButton(null)));
+		board.forEach(f -> add(new FieldButton(f)));
 		
 		board.registerObservers(e -> {
 			//TODO mostrar resultados para o usuário!
