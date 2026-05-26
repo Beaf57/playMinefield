@@ -1,6 +1,8 @@
 package br.com.beatrizdev.minefield.ui;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -10,7 +12,7 @@ import br.com.beatrizdev.minefield.model.Field;
 import br.com.beatrizdev.minefield.model.ObserverField;
 
 @SuppressWarnings("serial")
-public class FieldButton extends JButton implements ObserverField {
+public class FieldButton extends JButton implements ObserverField, MouseListener {
 
 	private final Color BG_STANDARD = new Color(184, 184, 184);
 	private final Color BG_MARKED = new Color(8, 179, 247);
@@ -20,10 +22,11 @@ public class FieldButton extends JButton implements ObserverField {
 	private Field field;
 	
 	public FieldButton(Field field) {
-		this.setField(field);
+		this.field = field;
 		setBackground(BG_STANDARD);
 		setBorder(BorderFactory.createBevelBorder(0));
 		
+		addMouseListener(this);
 		field.registerObserver(this);	
 	}
 
@@ -62,15 +65,47 @@ public class FieldButton extends JButton implements ObserverField {
 	}
 
 	private void applyStyleOpen() {
-		// TODO Auto-generated method stub
+		setBackground(BG_STANDARD);
+		setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		
+		switch(field.minesInTheNeighborhood()) {
+		case 1:
+			setForeground(TEXT_GREEN);
+			break;
+		case 2:
+			setForeground(Color.BLUE);
+			break;
+		case 3:
+			setForeground(Color.YELLOW);
+			break;
+		case 4:
+		case 5:
+		case 6:
+			setForeground(Color.RED);
+			break;
+		default:
+			setForeground(Color.PINK);
+		}
+		
+		String value = !field.safeNeighborhood() ? field.minesInTheNeighborhood() + "" : "";
+		setText(value);
+	}
+	
+	
+	//Interface dos eventos do mouse
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if(e.getButton() == 1) {
+			field.toOpen();
+		} else {
+			field.toggleMarkup();
+		}
 		
 	}
-
-	public Field getField() {
-		return field;
-	}
-
-	public void setField(Field field) {
-		this.field = field;
-	}
+	public void mouseReleased(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
+	
 }

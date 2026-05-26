@@ -124,8 +124,8 @@ public class Field {
 		return unveiled || sheltered;
 	}
 	
-	public long minesInTheNeighborhood() {
-		return neighbors.stream().filter(v -> v.mined).count();
+	public int minesInTheNeighborhood() {
+		return (int) neighbors.stream().filter(v -> v.mined).count();
 	}
 	
 	public void restart() {
