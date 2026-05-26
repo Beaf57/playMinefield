@@ -117,6 +117,7 @@ public class Board implements ObserverField {
 	private void showMines() {
 		fields.stream()
 			.filter(f -> f.isMined())
+			.filter(f -> !f.isMarked())
 			.forEach(f -> f.setOpen(true));
 	}
 	
