@@ -24,6 +24,10 @@ public class Board implements ObserverField {
 		drawMines();
 	}
 	
+	public void forEach(Consumer<Field> function) {
+		fields.forEach(function);
+	}
+	
 	public void registerObservers(Consumer<Boolean> observer) {
 		observers.add(observer);
 	}
@@ -81,6 +85,22 @@ public class Board implements ObserverField {
 	public void restart() {
 		fields.stream().forEach(f -> f.restart());
 		drawMines();
+	}
+
+	public int getLines() {
+		return lines;
+	}
+
+	public int getColumns() {
+		return columns;
+	}
+
+	public List<Field> getFields() {
+		return fields;
+	}
+
+	public List<Consumer<Boolean>> getObservers() {
+		return observers;
 	}
 
 	@Override
