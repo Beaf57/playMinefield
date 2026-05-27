@@ -132,6 +132,7 @@ public class Field {
 		open = false;
 		mined = false;
 		marked = false;
+		notifyObservers(EventField.RESTART);
 	}
 }
 

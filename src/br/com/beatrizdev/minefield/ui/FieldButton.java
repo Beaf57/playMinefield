@@ -52,6 +52,7 @@ public class FieldButton extends JButton implements ObserverField, MouseListener
 
 	private void applyStandardStyle() {
 		setBackground(BG_STANDARD);
+		setBorder(BorderFactory.createBevelBorder(0));
 		setText("");
 	}
 
@@ -68,7 +69,7 @@ public class FieldButton extends JButton implements ObserverField, MouseListener
 	}
 
 	private void applyStyleOpen() {
-		setBorder(BorderFactory.createLineBorder(Color.GRAY));setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		
 		if(field.isMined()) {
 			setBackground(BG_BLOWUP);

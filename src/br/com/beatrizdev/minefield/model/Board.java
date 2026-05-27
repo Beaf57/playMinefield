@@ -12,7 +12,7 @@ public class Board implements ObserverField {
 	private int mines;
 	
 	private final List<Field> fields = new ArrayList<>();
-	private final List<Consumer<Boolean>> observers = new ArrayList<>();
+	private final List<Consumer<ResultEvent>> observers = new ArrayList<>();
 	
 	public Board(int lines, int columns, int mines) {
 		this.lines = lines;
@@ -28,13 +28,13 @@ public class Board implements ObserverField {
 		fields.forEach(function);
 	}
 	
-	public void registerObservers(Consumer<Boolean> observer) {
+	public void registerObservers(Consumer<ResultEvent> observer) {
 		observers.add(observer);
 	}
 	
 	private void notifyObservers(boolean result) {
 		observers.stream()
-			.forEach(o -> o.accept(result));
+			.forEach(o -> o.accept(new ResultEvent(result)));
 	}
 	
 	public void toOpen(int line, int column) {
@@ -99,7 +99,7 @@ public class Board implements ObserverField {
 		return fields;
 	}
 
-	public List<Consumer<Boolean>> getObservers() {
+	public List<Consumer<ResultEvent>> getObservers() {
 		return observers;
 	}
 
